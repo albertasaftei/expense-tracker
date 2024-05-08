@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import homepageSlice from './containers/Homepage/homepageSlice'
+import appSlice from './appSlice'
 
 export const store = configureStore({
     reducer: {
+        app: appSlice,
         homepage: homepageSlice,
     },
 })
