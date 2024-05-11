@@ -11,13 +11,15 @@ import {
   headerHeight,
 } from "src/utils/constants";
 
-const Layout = () => {
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => {
   const currentFooterSection = useSelector(
     (state: RootState) => state.app.currentFooterSection
   );
   const dispatch = useDispatch();
-
-  console.log({ currentFooterSection });
 
   return (
     <Box
@@ -39,7 +41,7 @@ const Layout = () => {
           fontSize: 20,
         }}
       >
-        Expense Tracker
+        Expenses Tracker
       </Box>
       <Box
         sx={{
@@ -48,6 +50,7 @@ const Layout = () => {
           overflow: "auto",
         }}
       >
+        {children}
         <Box
           sx={{
             position: "fixed",
@@ -94,6 +97,7 @@ const Layout = () => {
               }}
             >
               <HomeRounded
+                className="footer-icon"
                 sx={{
                   color:
                     currentFooterSection === HOMEPAGE
@@ -115,6 +119,7 @@ const Layout = () => {
               }}
             >
               <GridViewRounded
+                className="footer-icon"
                 sx={{
                   color:
                     currentFooterSection === EXPENSES

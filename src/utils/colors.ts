@@ -1,9 +1,11 @@
-const black: string = '#1d1d1d'
-const darkGrey: string = '#BAC1B8'
-const lightGrey: string = '#D5D9D3'
+const black: string = '#191b19'
+const darkGrey: string = '#272927'
+const lightGrey: string = '#8b8b8b'
 const white: string = '#fafdf3'
-const red: string = '#B3565F'
-const green: string = '#7FB069'
+const red: string = '#D02D11'
+const lightRed: string = '#F16D55'
+const green: string = '#80C36F'
+const lightGreen: string = '#9CD08F'
 
 export default {
     red,
@@ -11,5 +13,7 @@ export default {
     black,
     white,
     darkGrey,
-    lightGrey
+    lightGrey,
+    lightRed,
+    lightGreen
 }
