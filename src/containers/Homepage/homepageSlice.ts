@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Category, Expense } from "./types";
+import { BackendUrl, backendUrl } from "src/utils/appConfig";
 
 export interface HomepageState {
     expenses: Expense[];
@@ -16,7 +17,7 @@ const initialState: HomepageState = {
 };
 
 export const fetchCategories = createAsyncThunk("fetchCategories", async () => {
-    const response = await fetch("http://localhost:3000/categories");
+    const response = await fetch(`${backendUrl[import.meta.env.VITE_NODE_ENV as keyof BackendUrl]}/categories`);
     if (response.ok) {
         return response.json();
     } else {
@@ -26,7 +27,7 @@ export const fetchCategories = createAsyncThunk("fetchCategories", async () => {
 });
 
 export const fetchExpenses = createAsyncThunk("fetchExpenses", async () => {
-    const response = await fetch("http://localhost:3000/expenses");
+    const response = await fetch(`${backendUrl[import.meta.env.VITE_NODE_ENV as keyof BackendUrl]}/expenses`);
     if (response.ok) {
         return response.json();
     } else {
