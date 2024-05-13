@@ -21,7 +21,7 @@ const Card = ({ mainText, upperDescription, backgroundColor }: CardProps) => {
       <Typography
         sx={{
           color: colors.darkGrey,
-          fontSize: 14,
+          fontSize: 12,
           fontWeight: "500",
           marginBottom: "8px",
         }}

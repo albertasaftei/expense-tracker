@@ -1,35 +1,74 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { Category, Expense } from "./types";
 
-export interface CounterState {
-    value: number
+export interface HomepageState {
+    expenses: Expense[];
+    categories: Category[];
+    isLoading?: boolean;
+    error?: boolean;
 }
 
-const initialState: CounterState = {
-    value: 0,
-}
+const initialState: HomepageState = {
+    expenses: [],
+    categories: [],
+    isLoading: false,
+    error: false,
+};
 
-export const counterSlice = createSlice({
-    name: 'counter',
+export const fetchCategories = createAsyncThunk("fetchCategories", async () => {
+    const response = await fetch("http://localhost:3000/categories");
+    if (response.ok) {
+        return response.json();
+    } else {
+        console.error("Error fetching categories");
+        return [];
+    }
+});
+
+export const fetchExpenses = createAsyncThunk("fetchExpenses", async () => {
+    const response = await fetch("http://localhost:3000/expenses");
+    if (response.ok) {
+        return response.json();
+    } else {
+        console.error("Error fetching expenses");
+        return [];
+    }
+});
+
+export const homepageSlice = createSlice({
+    name: "homepage",
     initialState,
-    reducers: {
-        increment: (state) => {
-            // Redux Toolkit allows us to write "mutating" logic in reducers. It
-            // doesn't actually mutate the state because it uses the Immer library,
-            // which detects changes to a "draft state" and produces a brand new
-            // immutable state based off those changes
-            state.value += 1
-        },
-        decrement: (state) => {
-            state.value -= 1
-        },
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload
-        },
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchExpenses.pending, (state) => {
+                state.isLoading = true;
+                state.error = false;
+            })
+            .addCase(fetchExpenses.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = false;
+                state.expenses = action.payload;
+            })
+            .addCase(fetchExpenses.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            })
+            .addCase(fetchCategories.pending, (state) => {
+                state.isLoading = true;
+                state.error = false;
+            })
+            .addCase(fetchCategories.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = false;
+                state.categories = action.payload;
+            })
+            .addCase(fetchCategories.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            })
+            ;
     },
-})
+});
 
-// Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
-
-export default counterSlice.reducer
+export default homepageSlice.reducer;
