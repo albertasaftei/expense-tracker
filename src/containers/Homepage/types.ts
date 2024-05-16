@@ -14,3 +14,11 @@ export interface Category {
     createdAt: string;
 
 }
+
+export interface AddExpenseInputs {
+    description: string;
+    category: number;
+    amount: number;
+    isEarning: boolean;
+}
+

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Category, Expense } from "./types";
+import { AddExpenseInputs, Category, Expense } from "./types";
 import { BackendUrl, backendUrl } from "src/utils/appConfig";
 
 export interface HomepageState {
@@ -32,6 +32,22 @@ export const fetchExpenses = createAsyncThunk("fetchExpenses", async () => {
         return response.json();
     } else {
         console.error("Error fetching expenses");
+        return [];
+    }
+});
+
+export const postNewExpense = createAsyncThunk("postNewExpense", async (data: AddExpenseInputs) => {
+    const response = await fetch(`${backendUrl[import.meta.env.VITE_NODE_ENV as keyof BackendUrl]}/expenses`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+    if (response.ok) {
+        return response.json();
+    } else {
+        console.error("Error posting new expense");
         return [];
     }
 });

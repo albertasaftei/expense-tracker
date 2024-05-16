@@ -17,9 +17,14 @@ import { routes } from "src/utils/routes";
 interface LayoutProps {
   children: React.ReactNode;
   floatingButton?: boolean;
+  floatingButtonOnClick?: () => void;
 }
 
-const Layout = ({ children, floatingButton }: LayoutProps) => {
+const Layout = ({
+  children,
+  floatingButton,
+  floatingButtonOnClick,
+}: LayoutProps) => {
   const currentFooterSection = useSelector(
     (state: RootState) => state.app.currentFooterSection
   );
@@ -67,6 +72,7 @@ const Layout = ({ children, floatingButton }: LayoutProps) => {
         {children}
         {floatingButton && (
           <Box
+            onClick={floatingButtonOnClick}
             sx={{
               position: "fixed",
               bottom: footerHeight + 20,

@@ -4,17 +4,24 @@ import { Card, Column, ExpenseStrip, Layout, Row } from "src/components";
 import { AppDispatch, RootState } from "src/store";
 import colors from "src/utils/colors";
 import { fetchCategories, fetchExpenses } from "./homepageSlice";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "src/utils/routes";
 import { getEarnings, getExpenses } from "src/utils/utils";
+import AddRecordDialog from "./components/AddRecordDialog";
 
 const Homepage: React.FC = () => {
+  const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
   const { expenses, isLoading, error } = useSelector(
     (state: RootState) => state.homepage
   );
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
+  const firstTenRecords = useMemo(
+    () => (expenses?.length && expenses.slice(0, 10)) || [],
+    [expenses]
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -22,7 +29,10 @@ const Homepage: React.FC = () => {
   }, []);
 
   return (
-    <Layout floatingButton>
+    <Layout
+      floatingButton
+      floatingButtonOnClick={() => setIsAddExpenseModalOpen(true)}
+    >
       <Box
         sx={{
           display: "flex",
@@ -89,11 +99,15 @@ const Homepage: React.FC = () => {
           {error && (
             <Typography color={colors.red}>Error fetching expenses</Typography>
           )}
-          {expenses.map((expense) => (
-            <ExpenseStrip key={expense.id} expense={expense} />
-          ))}
+          {firstTenRecords.map((expense) => {
+            return <ExpenseStrip key={expense.id} expense={expense} />;
+          })}
         </Column>
       </Box>
+      <AddRecordDialog
+        isAddExpenseModalOpen={isAddExpenseModalOpen}
+        setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}
+      />
     </Layout>
   );
 };
