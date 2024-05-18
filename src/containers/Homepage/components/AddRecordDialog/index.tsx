@@ -11,10 +11,10 @@ import { FormWrapper, Label } from "./styles";
 import { Column, Row } from "src/components";
 import { Close } from "@mui/icons-material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { AddExpenseInputs } from "../types";
+import { AddExpenseInputs } from "../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "src/store";
-import { fetchExpenses, postNewExpense } from "../homepageSlice";
+import { fetchExpenses, postNewExpense } from "../../homepageSlice";
 
 interface AddRecordDialogProps {
   isAddExpenseModalOpen: boolean;

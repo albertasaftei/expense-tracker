@@ -8,7 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "src/utils/routes";
 import { getEarnings, getExpenses } from "src/utils/utils";
-import AddRecordDialog from "./components/AddRecordDialog";
+import { AddRecordDialog } from "./components";
 
 const Homepage: React.FC = () => {
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
@@ -40,16 +40,25 @@ const Homepage: React.FC = () => {
           justifyContent: "center",
         }}
       >
-        <Card
-          mainText={getExpenses(expenses).toString()}
-          upperDescription="Spent this month >"
-          backgroundColor={colors.lightRed}
-        />
-        <Card
-          mainText={getEarnings(expenses).toString()}
-          upperDescription="Earned this month >"
-          backgroundColor={colors.lightGreen}
-        />
+        {expenses.length ? (
+          <>
+            <Card
+              mainText={getExpenses(expenses).toString()}
+              upperDescription="Spent this month >"
+              backgroundColor={colors.lightRed}
+            />
+            <Card
+              mainText={getEarnings(expenses).toString()}
+              upperDescription="Earned this month >"
+              backgroundColor={colors.lightGreen}
+            />
+          </>
+        ) : (
+          <>
+            <Skeleton height={150} width="100%" />
+            <Skeleton height={150} width="100%" />
+          </>
+        )}
       </Box>
       <Box
         sx={{
