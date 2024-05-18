@@ -63,7 +63,7 @@ const CurrentMonthChart: React.FC = () => {
               );
             }}
           >
-            {expensesCurrentMonth.map((entry, index) => (
+            {expensesCurrentMonth.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
