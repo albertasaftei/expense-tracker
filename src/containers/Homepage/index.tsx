@@ -1,14 +1,21 @@
 import { Box, Skeleton, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Column, ExpenseStrip, Layout, Row } from "src/components";
+import { Column, ExpenseStrip, Layout, Row } from "src/components";
 import { AppDispatch, RootState } from "src/store";
 import colors from "src/utils/colors";
-import { fetchCategories, fetchExpenses } from "./homepageSlice";
+import {
+  fetchCategories,
+  fetchExpenses,
+  fetchExpensesCurrentMonth,
+} from "./homepageSlice";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "src/utils/routes";
-import { getEarnings, getExpenses } from "src/utils/utils";
-import { AddRecordDialog } from "./components";
+import {
+  AddRecordDialog,
+  CurrentMonthChart,
+  CurrentMonthData,
+} from "./components";
 
 const Homepage: React.FC = () => {
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
@@ -26,6 +33,7 @@ const Homepage: React.FC = () => {
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchExpenses());
+    dispatch(fetchExpensesCurrentMonth());
   }, []);
 
   return (
@@ -33,33 +41,11 @@ const Homepage: React.FC = () => {
       floatingButton
       floatingButtonOnClick={() => setIsAddExpenseModalOpen(true)}
     >
-      <Box
-        sx={{
-          display: "flex",
-          gap: "16px",
-          justifyContent: "center",
-        }}
-      >
-        {expenses.length ? (
-          <>
-            <Card
-              mainText={getExpenses(expenses).toString()}
-              upperDescription="Spent this month >"
-              backgroundColor={colors.lightRed}
-            />
-            <Card
-              mainText={getEarnings(expenses).toString()}
-              upperDescription="Earned this month >"
-              backgroundColor={colors.lightGreen}
-            />
-          </>
-        ) : (
-          <>
-            <Skeleton height={150} width="100%" />
-            <Skeleton height={150} width="100%" />
-          </>
-        )}
-      </Box>
+      {/******CURRENT MONTH DATA********/}
+      <CurrentMonthData />
+      {/******CURRENT MONTH CHART********/}
+      <CurrentMonthChart />
+      {/******LAST 10 TRANSACTIONS********/}
       <Box
         sx={{
           margin: "16px 0px",
@@ -113,6 +99,7 @@ const Homepage: React.FC = () => {
           })}
         </Column>
       </Box>
+      {/******ADD RECORD DIALOG********/}
       <AddRecordDialog
         isAddExpenseModalOpen={isAddExpenseModalOpen}
         setIsAddExpenseModalOpen={setIsAddExpenseModalOpen}

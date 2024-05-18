@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Column, ExpenseStrip, Layout } from "src/components";
 import { RootState } from "src/store";
 
-const Transactions = () => {
+const Transactions: React.FC = () => {
   const { expenses } = useSelector((state: RootState) => state.homepage);
 
   return (

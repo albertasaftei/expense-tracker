@@ -4,6 +4,7 @@ import { BackendUrl, backendUrl } from "src/utils/appConfig";
 
 export interface HomepageState {
     expenses: Expense[];
+    expensesCurrentMonth: Expense[];
     categories: Category[];
     isLoading?: boolean;
     error?: boolean;
@@ -11,6 +12,7 @@ export interface HomepageState {
 
 const initialState: HomepageState = {
     expenses: [],
+    expensesCurrentMonth: [],
     categories: [],
     isLoading: false,
     error: false,
@@ -52,6 +54,16 @@ export const postNewExpense = createAsyncThunk("postNewExpense", async (data: Ad
     }
 });
 
+export const fetchExpensesCurrentMonth = createAsyncThunk("fetchExpensesCurrentMonth", async () => {
+    const response = await fetch(`${backendUrl[import.meta.env.VITE_NODE_ENV as keyof BackendUrl]}/expenses/currentMonth`);
+    if (response.ok) {
+        return response.json();
+    } else {
+        console.error("Error fetching expenses for current month");
+        return [];
+    }
+});
+
 export const homepageSlice = createSlice({
     name: "homepage",
     initialState,
@@ -81,6 +93,19 @@ export const homepageSlice = createSlice({
                 state.categories = action.payload;
             })
             .addCase(fetchCategories.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            })
+            .addCase(fetchExpensesCurrentMonth.pending, (state) => {
+                state.isLoading = true;
+                state.error = false;
+            })
+            .addCase(fetchExpensesCurrentMonth.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = false;
+                state.expensesCurrentMonth = action.payload;
+            })
+            .addCase(fetchExpensesCurrentMonth.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
             })

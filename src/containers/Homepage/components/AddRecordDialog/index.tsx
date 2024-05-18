@@ -15,6 +15,7 @@ import { AddExpenseInputs } from "../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "src/store";
 import { fetchExpenses, postNewExpense } from "../../homepageSlice";
+import colors from "src/utils/colors";
 
 interface AddRecordDialogProps {
   isAddExpenseModalOpen: boolean;
@@ -29,10 +30,10 @@ function Transition(props: { children: React.ReactElement }) {
   );
 }
 
-const AddRecordDialog = ({
+const AddRecordDialog: React.FC<AddRecordDialogProps> = ({
   isAddExpenseModalOpen,
   setIsAddExpenseModalOpen,
-}: AddRecordDialogProps) => {
+}) => {
   const { categories } = useSelector((state: RootState) => state.homepage);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -56,6 +57,8 @@ const AddRecordDialog = ({
       <FormWrapper
         sx={{
           padding: "16px",
+          height: "100%",
+          backgroundColor: colors.white,
         }}
       >
         <Row
