@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import colors from "src/utils/colors";
 import Strip from "../Strip";
 import { useSelector } from "react-redux";
@@ -16,28 +16,38 @@ const ExpenseStrip = ({ expense }: ExpenseStripProps) => {
   return (
     <Strip
       left={
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: colors.lightestGrey,
-            borderRadius: "8px",
-            padding: "8px",
-          }}
+        <Tooltip
+          arrow
+          title={
+            categories.find((category) => {
+              return category.id === expense.categoryId;
+            })?.name
+          }
         >
-          <img
-            loading="lazy"
-            style={{
-              height: "24px",
-              width: "24px",
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: colors.lightestGrey,
+              borderRadius: "8px",
+              padding: "8px",
             }}
-            src={
-              categories.find((category) => category.id === expense.categoryId)
-                ?.iconUrl
-            }
-          />
-        </Box>
+          >
+            <img
+              loading="lazy"
+              style={{
+                height: "24px",
+                width: "24px",
+              }}
+              src={
+                categories.find(
+                  (category) => category.id === expense.categoryId
+                )?.iconUrl
+              }
+            />
+          </Box>
+        </Tooltip>
       }
       center={
         <Box

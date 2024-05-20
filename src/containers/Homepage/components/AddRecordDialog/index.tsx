@@ -14,7 +14,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { AddExpenseInputs } from "../../types";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "src/store";
-import { fetchExpenses, postNewExpense } from "../../homepageSlice";
+import {
+  fetchExpenses,
+  fetchExpensesCurrentMonth,
+  postNewExpense,
+} from "../../homepageSlice";
 import colors from "src/utils/colors";
 
 interface AddRecordDialogProps {
@@ -43,6 +47,7 @@ const AddRecordDialog: React.FC<AddRecordDialogProps> = ({
   ) => {
     await dispatch(postNewExpense(data));
     await dispatch(fetchExpenses());
+    await dispatch(fetchExpensesCurrentMonth());
     setIsAddExpenseModalOpen(false);
     reset();
   };
