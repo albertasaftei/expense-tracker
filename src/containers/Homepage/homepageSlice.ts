@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AddExpenseInputs, Category, Expense } from "./types";
+import { AddExpenseInputs, Category, Expense, FilterExpenses } from "./types";
 import { BackendUrl, backendUrl } from "src/utils/appConfig";
 
 export interface HomepageState {
     expenses: Expense[];
-    expensesCurrentMonth: Expense[];
+    expensesCurrentMonth: Expense[] | null;
     categories: Category[];
     isLoading?: boolean;
     error?: boolean;
@@ -12,7 +12,7 @@ export interface HomepageState {
 
 const initialState: HomepageState = {
     expenses: [],
-    expensesCurrentMonth: [],
+    expensesCurrentMonth: null,
     categories: [],
     isLoading: false,
     error: false,
@@ -64,6 +64,22 @@ export const fetchExpensesCurrentMonth = createAsyncThunk("fetchExpensesCurrentM
     }
 });
 
+export const fetchFilteredExpenses = createAsyncThunk("fetchFilteredExpenses", async (data?: FilterExpenses) => {
+    const response = await fetch(`${backendUrl[import.meta.env.VITE_NODE_ENV as keyof BackendUrl]}/expenses`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+    if (response.ok) {
+        return response.json();
+    } else {
+        console.error("Error posting expenses");
+        return [];
+    }
+});
+
 export const homepageSlice = createSlice({
     name: "homepage",
     initialState,
@@ -106,6 +122,19 @@ export const homepageSlice = createSlice({
                 state.expensesCurrentMonth = action.payload;
             })
             .addCase(fetchExpensesCurrentMonth.rejected, (state) => {
+                state.isLoading = false;
+                state.error = true;
+            })
+            .addCase(fetchFilteredExpenses.pending, (state) => {
+                state.isLoading = true;
+                state.error = false;
+            })
+            .addCase(fetchFilteredExpenses.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.error = false;
+                state.expenses = action.payload;
+            })
+            .addCase(fetchFilteredExpenses.rejected, (state) => {
                 state.isLoading = false;
                 state.error = true;
             })
