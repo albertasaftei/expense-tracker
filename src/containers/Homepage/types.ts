@@ -23,3 +23,8 @@ export interface AddExpenseInputs {
     isEarning: boolean;
 }
 
+export interface FilterExpenses {
+    dateFrom: Date;
+    dateTo: Date;
+}
+

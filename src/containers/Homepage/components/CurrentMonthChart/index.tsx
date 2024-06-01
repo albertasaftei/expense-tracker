@@ -12,9 +12,13 @@ const CurrentMonthChart: React.FC = () => {
     (state: RootState) => state.homepage
   );
 
+  if (expensesCurrentMonth?.length === 0) {
+    return;
+  }
+
   return (
     <Box>
-      {expensesCurrentMonth.length ? (
+      {expensesCurrentMonth ? (
         <ResponsiveContainer
           height={300}
           width={"100%"}
